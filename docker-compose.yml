@@ -1,0 +1,26 @@
+services:
+  # Сервер Mumble (Murmur)
+  mumble-server:
+    image: mumblevoip/mumble-server:latest
+    container_name: mumble-server
+    restart: unless-stopped
+    ports:
+      - "64738:64738"          # TCP для управления
+      - "64738:64738/udp"      # UDP для голоса
+    environment:
+      - MUMBLE_SUPERUSER_PASSWORD=root  # Пароль администратора
+    volumes:
+      - ./mumble-data:/data
+      - ./mumble_server_config.ini:/data/mumble_server_config.ini
+
+  # Веб-клиент с встроенным прокси
+  mumble-web:
+    image: rankenstein/mumble-web:latest
+    container_name: mumble-web
+    restart: unless-stopped
+    ports:
+      - "8080:8080"              # Веб-интерфейс будет доступен на порту 8080
+    environment:
+      - MUMBLE_SERVER=mumble-server:64738
+    depends_on:
+      - mumble-server
