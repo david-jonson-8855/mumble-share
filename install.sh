@@ -13,3 +13,6 @@ sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
 
 echo "Установка завершена. Чтобы использовать Docker без sudo, перезайдите в систему."
+
+# Запуск приложения
+docker compose up
